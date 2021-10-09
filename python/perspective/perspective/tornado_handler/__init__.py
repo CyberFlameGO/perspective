@@ -7,6 +7,6 @@
 #
 
 from .tornado_handler import PerspectiveTornadoHandler
-from .tornado_client import websocket
+from ..client.tornado import websocket
 
 __all__ = ["PerspectiveTornadoHandler", "websocket"]
