@@ -10,15 +10,6 @@
 const {execute} = require("./script_utils.js");
 const fs = require("fs");
 var http = require("https");
-const cpy = require("cpy");
-
-if (!process.env.AZURE_TOKEN) {
-    throw new Error("Missing AZURE_TOKEN");
-}
-
-if (!process.env.AZURE_BUILD_ID) {
-    throw new Error("Missing AZURE_BUILD_ID");
-}
 
 if (!process.env.GITHUB_TOKEN) {
     throw new Error("Missing GITHUB_TOKEN");
@@ -69,10 +60,12 @@ try {
         "cp36-cp36m-manylinux2010_x86_64",
         "cp36-cp36m-manylinux2014_x86_64",
         "cp37-cp37m-macosx_10_15_x86_64",
+        "cp37-cp37m-macosx_11_0_x86_64",
         "cp37-cp37m-manylinux2010_x86_64",
         "cp37-cp37m-manylinux2014_x86_64",
         "cp37-cp37m-win64_amd",
         "cp38-cp38-macosx_10_15_x86_64",
+        "cp38-cp38-macosx_11_0_x86_64",
         "cp38-cp38-manylinux2010_x86_64",
         "cp38-cp38-manylinux2014_x86_64",
         "cp38-cp38m-win64_amd",
@@ -108,23 +101,6 @@ try {
 
         // publish is run after version, so any package.json has the right version
         const pkg_json = require("@finos/perspective/package.json");
-        const PERSPECTIVE_VERSION = pkg_json.version;
-
-        // Python publish
-        console.log(`-- Building "perspective-python" ${PERSPECTIVE_VERSION}`);
-        fs.writeFileSync("./.perspectiverc", `PSP_PROJECT=python`);
-        require("dotenv").config({path: "./.perspectiverc"});
-        execute`yarn clean --deps`;
-        execute`yarn build`;
-
-        // sdist into `python/perspective/dist`, and test the sdist as well.
-        execute`cd ./python/perspective && ./scripts/build_sdist.sh`;
-        const sdist_name = `perspective-python-${PERSPECTIVE_VERSION}.tar.gz`;
-
-        console.log(
-            `-- Uploading source distribution "${sdist_name}" to PyPi"`
-        );
-        execute`cd python/perspective && python3 -m twine upload ./dist/${sdist_name}`;
     })();
 } catch (e) {
     console.error(e.message);

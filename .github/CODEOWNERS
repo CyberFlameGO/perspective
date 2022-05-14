@@ -1,0 +1,9 @@
+
+# CI/CD
+.github/workflows/*.yml @timkpaine
+
+# Jupyter
+packages/perspective-jupyterlab @timkpaine @sc1f
+
+# Python
+python/perspective @timkpaine @sc1f

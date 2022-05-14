@@ -18,7 +18,11 @@ const PACKAGE_ROOT = path.join(__dirname, "..", "..", "..");
  */
 const kill_jlab = () => {
     console.log("-- Cleaning up Jupyterlab process");
-    execute`ps aux | grep -i '[j]upyter-lab --no-browser' | awk '{print $2}' | xargs kill -9 && echo "[perspective-jupyterlab] JupyterLab process terminated"`;
+    try {
+        execute`ps aux | grep -i '[j]upyter-lab --no-browser' | awk '{print $2}' | xargs kill -9 && echo "[perspective-jupyterlab] JupyterLab process terminated"`;
+    } catch {
+        // ignore
+    }
 };
 
 exports.kill_jlab = kill_jlab;
@@ -105,6 +109,7 @@ exports.start_jlab = function () {
             return proc;
         });
     } catch (e) {
+        console.error("Error during setup");
         console.error(e);
         kill_jlab();
         process.exit(1);

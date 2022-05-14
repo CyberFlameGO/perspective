@@ -14,6 +14,7 @@ from datetime import date, datetime
 from perspective.table import Table
 
 SUPERSTORE_ARROW = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..", "node_modules", "superstore-arrow", "superstore.arrow")
+SUPERSTORE_ARROW_MINI = os.path.join(os.path.dirname(__file__), "arrow", "superstore-mini.arrow")
 DATE32_ARROW = os.path.join(os.path.dirname(__file__), "arrow", "date32.arrow")
 DATE64_ARROW = os.path.join(os.path.dirname(__file__), "arrow", "date64.arrow")
 DICT_ARROW = os.path.join(os.path.dirname(__file__), "arrow", "dict.arrow")
@@ -22,14 +23,22 @@ names = ["a", "b", "c", "d"]
 
 
 class TestTableArrow(object):
-
     def test_table_arrow_loads(self):
-        with open(SUPERSTORE_ARROW, mode='rb') as file:  # b is important -> binary
+        if not os.path.exists(SUPERSTORE_ARROW):
+            file_path = SUPERSTORE_ARROW_MINI
+            size = 10
+            width = 19
+        else:
+            file_path = SUPERSTORE_ARROW
+            size = 9994
+            width = 21
+
+        with open(file_path, mode='rb') as file:  # b is important -> binary
             tbl = Table(file.read())
-            assert tbl.size() == 9994
+            assert tbl.size() == size
             v = tbl.view()
             df = v.to_df()
-            assert df.shape == (9994, 21)
+            assert df.shape == (size, width)
 
     # files
 

@@ -73,7 +73,10 @@ describe.jupyter = (body, {name, root} = {}) => {
     // Remove the automatically generated workspaces directory, as it
     // will try to redirect single-document URLs to the last URL opened.
     beforeEach(remove_jupyter_artifacts);
-    afterAll(remove_jupyter_artifacts);
+    afterAll(() => {
+        console.warn("Normal teardown");
+        remove_jupyter_artifacts();
+    });
 
     // URL is null because each test.capture_jupyterlab will have its own
     // unique notebook generated.
@@ -109,15 +112,23 @@ module.exports = {
             visible: true,
         });
 
+        // if theres a "select kernel" dialog, just click it
+        try {
+            const button = await page.waitForSelector(
+                "div.jp-Dialog-content > div.jp-Dialog-footer > button.jp-mod-accept",
+                {timeout: 5000}
+            );
+            if (button) {
+                button.click();
+            }
+        } catch {
+            // ignore
+        }
+
         // wait for a cell to be active
         await page.waitForSelector(
-            '.jp-Notebook-ExecutionIndicator:not([data-status="idle"])',
-            {timeout: 3000}
-        );
-
-        await page.waitForSelector(
             '.jp-Notebook-ExecutionIndicator[data-status="idle"]',
-            {timeout: 3000}
+            {timeout: 15000}
         );
 
         // Use our custom keyboard shortcut to run all cells

@@ -115,6 +115,7 @@ try {
     if (!IS_JUPYTER) {
         // test:build irrelevant for jupyter tests
         execute`node_modules/.bin/lerna run test:build --stream --scope="@finos/${PACKAGE}"`;
+        return;
     }
 
     if (!PACKAGE || minimatch("perspective-viewer", PACKAGE)) {

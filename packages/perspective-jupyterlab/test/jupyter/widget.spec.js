@@ -12,16 +12,20 @@ const utils = require("@finos/perspective-test");
 const {execute_all_cells} = require("./utils");
 
 const default_body = async (page) => {
+    console.warn(1);
     await execute_all_cells(page);
+    console.warn(2);
     const viewer = await page.waitForSelector(
         ".jp-OutputArea-output perspective-viewer",
-        {visible: true, timeout: 30000}
+        {visible: true, timeout: 240000}
     );
+    console.warn(3);
     await viewer.evaluate(async (viewer) => await viewer.flush());
+    console.warn(4);
     return viewer;
 };
 
-jest.setTimeout(30000);
+jest.setTimeout(240000);
 
 utils.with_jupyterlab(process.env.__JUPYTERLAB_PORT__, () => {
     describe.jupyter(
@@ -36,7 +40,9 @@ utils.with_jupyterlab(process.env.__JUPYTERLAB_PORT__, () => {
                     "w",
                 ],
                 async (page) => {
+                    console.warn(5);
                     const viewer = await default_body(page);
+                    console.warn(6);
                     const num_columns = await viewer.evaluate(
                         async (viewer) => {
                             const tbl = viewer.querySelector("regular-table");
@@ -47,6 +53,7 @@ utils.with_jupyterlab(process.env.__JUPYTERLAB_PORT__, () => {
 
                     expect(num_columns).toEqual(3);
 
+                    console.warn(7);
                     const num_rows = await viewer.evaluate(async (viewer) => {
                         const tbl = viewer.querySelector("regular-table");
                         return tbl.querySelectorAll("tbody tr").length;
