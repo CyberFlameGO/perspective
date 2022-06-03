@@ -1,4 +1,4 @@
-trigger:
+gitrigger:
   batch: true
   branches:
     include:
@@ -559,28 +559,27 @@ jobs:
       - ${{ parameters.jsUploadJupyterArtifactsSteps }}
 
 
-  # - job: "Linux_BuildPSP"
-  #   pool:
-  #     vmImage: "ubuntu-latest"
+  - job: "Linux_BuildPSP"
+    pool:
+      vmImage: "ubuntu-latest"
 
-  #   strategy:
-  #     matrix:
-  #       Python37ManyLinux2010:
-  #         python.version: "3.7"
-  #         python_flag: ""
-  #         manylinux_flag: "--manylinux2010"
-  #         artifact_name: "cp37-cp37m-manylinux2010_x86_64"
+    strategy:
+      matrix:
+        Python37ManyLinux2010:
+          python.version: "3.7"
+          python_flag: ""
+          manylinux_flag: "--manylinux2010"
+          artifact_name: "cp37-cp37m-manylinux2010_x86_64"
 
-  #   steps:
-  #     - ${{ parameters.initSteps }}
-  #     - ${{ parameters.pythonInitSteps }}
-  #     - ${{ parameters.pythonBuildDockerPSPOnlySteps }}
-  #     - ${{ parameters.pythonUploadArtifactsSteps}}
+    steps:
+      - ${{ parameters.initSteps }}
+      - ${{ parameters.pythonInitSteps }}
+      - ${{ parameters.pythonBuildDockerPSPOnlySteps }}
+      - ${{ parameters.pythonUploadArtifactsSteps}}
 
 
   - job: "Linux"
-    # dependsOn: ["WebAssembly", "Linux_BuildPSP"]
-    dependsOn: ["WebAssembly"]
+    dependsOn: ["WebAssembly", "Linux_BuildPSP"]
     pool:
       vmImage: "ubuntu-latest"
 
@@ -634,7 +633,7 @@ jobs:
       - ${{ parameters.initSteps }}
       - ${{ parameters.pythonInitSteps }}
       - ${{ parameters.pythonLintSteps }}
-      # - ${{ parameters.pythonDownloadArtifactsSteps}}
+      - ${{ parameters.pythonDownloadArtifactsSteps}}
       - ${{ parameters.jsDownloadJupyterArtifactsSteps }}
       - ${{ parameters.pythonBuildDockerSteps }}
       - ${{ parameters.pythonCoverageSteps }}
@@ -658,27 +657,26 @@ jobs:
   #     - ${{ parameters.pythonBuildSteps }}
   #     - ${{ parameters.pythonSDistSteps }}
 
-  # - job: "Windows_BuildPSP"
-  #   pool:
-  #     vmImage: "windows-2019"
+  - job: "Windows_BuildPSP"
+    pool:
+      vmImage: "windows-2019"
 
-  #   strategy:
-  #     matrix:
-  #       Python39:
-  #         python.version: "3.9"
-  #         python_flag: "--python39"
-  #         artifact_name: "cp39-cp39m-win64_amd"
+    strategy:
+      matrix:
+        Python39:
+          python.version: "3.9"
+          python_flag: "--python39"
+          artifact_name: "cp39-cp39m-win64_amd"
   
-  #   steps:
-  #     - ${{ parameters.initSteps }}
-  #     - ${{ parameters.pythonInitSteps }}
-  #     - ${{ parameters.windowsInitSteps }}
-  #     - ${{ parameters.pythonBuildVS2019PSPOnlySteps }}
-  #     - ${{ parameters.pythonUploadArtifactsSteps}}
+    steps:
+      - ${{ parameters.initSteps }}
+      - ${{ parameters.pythonInitSteps }}
+      - ${{ parameters.windowsInitSteps }}
+      - ${{ parameters.pythonBuildVS2019PSPOnlySteps }}
+      - ${{ parameters.pythonUploadArtifactsSteps}}
 
   - job: "Windows"
-    # dependsOn: ["WebAssembly", "Windows_BuildPSP"]
-    dependsOn: ["WebAssembly"]
+    dependsOn: ["WebAssembly", "Windows_BuildPSP"]
     pool:
       vmImage: "windows-2019"
 
@@ -702,7 +700,7 @@ jobs:
       - ${{ parameters.initSteps }}
       - ${{ parameters.pythonInitSteps }}
       - ${{ parameters.windowsInitSteps }}
-      # - ${{ parameters.pythonDownloadArtifactsSteps}}
+      - ${{ parameters.pythonDownloadArtifactsSteps}}
       - ${{ parameters.jsDownloadJupyterArtifactsSteps }}
       - ${{ parameters.pythonBuildVS2019Steps }}
       - ${{ parameters.pythonCoverageSteps }}
@@ -710,8 +708,7 @@ jobs:
   # Separate out windows wheel builds as the windows
   # build takes 37 years to finish
   - job: "Windows_Wheels"
-    # dependsOn: ["WebAssembly", "Windows_BuildPSP"]
-    dependsOn: ["WebAssembly"]
+    dependsOn: ["WebAssembly", "Windows_BuildPSP"]
     pool:
       vmImage: "windows-2019"
     condition: or(startsWith(variables['build.sourceBranch'], 'refs/tags/v'), eq(variables['Build.Reason'], 'Schedule'), eq(variables['Build.Reason'], 'Manual'))
@@ -735,35 +732,34 @@ jobs:
       - ${{ parameters.initSteps }}
       - ${{ parameters.pythonInitSteps }}
       - ${{ parameters.windowsInitSteps }}
-      # - ${{ parameters.pythonDownloadArtifactsSteps}}
+      - ${{ parameters.pythonDownloadArtifactsSteps}}
       - ${{ parameters.jsDownloadJupyterArtifactsSteps }}
       - ${{ parameters.pythonWindowsWheelVS2019Steps }}
 
 
-  # - job: "MacOS_Catalina_BuildPSP"
-  #   pool:
-  #     vmImage: "macos-10.15"
-  #   condition: or(startsWith(variables['build.sourceBranch'], 'refs/tags/v'), eq(variables['Build.Reason'], 'Schedule'), eq(variables['Build.Reason'], 'Manual'))
+  - job: "MacOS_Catalina_BuildPSP"
+    pool:
+      vmImage: "macos-10.15"
+    condition: or(startsWith(variables['build.sourceBranch'], 'refs/tags/v'), eq(variables['Build.Reason'], 'Schedule'), eq(variables['Build.Reason'], 'Manual'))
 
-  #   strategy:
-  #     matrix:
-  #         Python39:
-  #           python.version: "3.9"
-  #           python_flag: "--python39"
-  #           artifact_name: "cp39-cp39-macosx_10_15_x86_64"
+    strategy:
+      matrix:
+          Python39:
+            python.version: "3.9"
+            python_flag: "--python39"
+            artifact_name: "cp39-cp39-macosx_10_15_x86_64"
           
-  #   steps:
-  #     - ${{ parameters.initSteps }}
-  #     - ${{ parameters.pythonInitSteps }}
-  #     - ${{ parameters.macInitSteps }}
-  #     - ${{ parameters.pythonLintSteps }}
-  #     - ${{ parameters.pythonBuildPSPOnlySteps }}
-  #     - ${{ parameters.pythonUploadArtifactsSteps}}
+    steps:
+      - ${{ parameters.initSteps }}
+      - ${{ parameters.pythonInitSteps }}
+      - ${{ parameters.macInitSteps }}
+      - ${{ parameters.pythonLintSteps }}
+      - ${{ parameters.pythonBuildPSPOnlySteps }}
+      - ${{ parameters.pythonUploadArtifactsSteps}}
 
 
   - job: "MacOS_Catalina"
-    # dependsOn: ["WebAssembly", "MacOS_Catalina_BuildPSP"]
-    dependsOn: ["WebAssembly"]
+    dependsOn: ["WebAssembly", "MacOS_Catalina_BuildPSP"]
     pool:
       vmImage: "macos-10.15"
     condition: or(startsWith(variables['build.sourceBranch'], 'refs/tags/v'), eq(variables['Build.Reason'], 'Schedule'), eq(variables['Build.Reason'], 'Manual'))
@@ -795,34 +791,33 @@ jobs:
       - ${{ parameters.initSteps }}
       - ${{ parameters.pythonInitSteps }}
       - ${{ parameters.macInitSteps }}
-      # - ${{ parameters.pythonDownloadArtifactsSteps}}
+      - ${{ parameters.pythonDownloadArtifactsSteps}}
       - ${{ parameters.jsDownloadJupyterArtifactsSteps }}
       - ${{ parameters.pythonBuildSteps }}
       - ${{ parameters.pythonCoverageSteps }}
       - ${{ parameters.pythonMacWheelSteps }}
 
-  # - job: "MacOS_BigSur_BuildPSP"
-  #   pool:
-  #     vmImage: "macos-11"
+  - job: "MacOS_BigSur_BuildPSP"
+    pool:
+      vmImage: "macos-11"
 
-  #   strategy:
-  #     matrix:
-  #       Python39:
-  #         python.version: "3.9"
-  #         python_flag: "--python39"
-  #         artifact_name: "cp39-cp39-macosx_11_0_x86_64"
+    strategy:
+      matrix:
+        Python39:
+          python.version: "3.9"
+          python_flag: "--python39"
+          artifact_name: "cp39-cp39-macosx_11_0_x86_64"
 
-  #   steps:
-  #     - ${{ parameters.initSteps }}
-  #     - ${{ parameters.pythonInitSteps }}
-  #     - ${{ parameters.macInitSteps }}
-  #     - ${{ parameters.pythonLintSteps }}
-  #     - ${{ parameters.pythonBuildPSPOnlySteps }}
-  #     - ${{ parameters.pythonUploadArtifactsSteps }}
+    steps:
+      - ${{ parameters.initSteps }}
+      - ${{ parameters.pythonInitSteps }}
+      - ${{ parameters.macInitSteps }}
+      - ${{ parameters.pythonLintSteps }}
+      - ${{ parameters.pythonBuildPSPOnlySteps }}
+      - ${{ parameters.pythonUploadArtifactsSteps }}
   
   - job: "MacOS_BigSur"
-    # dependsOn: ["WebAssembly", "MacOS_BigSur_BuildPSP"]
-    dependsOn: ["WebAssembly"]
+    dependsOn: ["WebAssembly", "MacOS_BigSur_BuildPSP"]
     pool:
       vmImage: "macos-11"
   
@@ -837,7 +832,7 @@ jobs:
       - ${{ parameters.initSteps }}
       - ${{ parameters.pythonInitSteps }}
       - ${{ parameters.macInitSteps }}
-      # - ${{ parameters.pythonDownloadArtifactsSteps}}
+      - ${{ parameters.pythonDownloadArtifactsSteps}}
       - ${{ parameters.jsDownloadJupyterArtifactsSteps }}
       - ${{ parameters.pythonBuildSteps }}
       - ${{ parameters.pythonCoverageSteps }}
