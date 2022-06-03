@@ -50,13 +50,11 @@ export class PerspectiveWidget extends Widget {
         const theme = options.theme || "Material Light";
         const settings =
             typeof options.settings === "boolean" ? options.settings : true;
-        const editable = options.editable || false;
         const server = options.server || false;
         const client = options.client || false;
         // const selectable: boolean = options.selectable || false;
         this.server = server;
         this.client = client;
-        this.editable = editable;
         this._viewer_config = {
             plugin,
             plugin_config,
@@ -246,19 +244,6 @@ export class PerspectiveWidget extends Widget {
 
     set server(server) {
         this._server = server;
-    }
-
-    get editable() {
-        return this._editable;
-    }
-
-    set editable(editable) {
-        this._editable = editable;
-        if (this._editable) {
-            this.viewer.setAttribute("editable", "");
-        } else {
-            this.viewer.removeAttribute("editable");
-        }
     }
 
     get selectable() {
