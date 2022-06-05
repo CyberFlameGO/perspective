@@ -16,7 +16,7 @@ module.exports = async function () {
         "--no-sandbox",
         "--disable-setuid-sandbox",
         "--disable-dev-shm-usage",
-        "--font-render-hinting=medium",
+        "--font-render-hinting=none",
         '--proxy-server="direct://"',
         "--proxy-bypass-list=*",
     ];

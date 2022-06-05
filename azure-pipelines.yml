@@ -2,7 +2,7 @@ trigger:
   batch: true
   branches:
     include:
-      - master
+      - "*"
   tags:
     include:
       - "v*"
@@ -338,275 +338,275 @@ jobs:
           targetPath: "$(System.DefaultWorkingDirectory)/packages/perspective-jupyterlab/perspective-jupyterlab-dist.tgz"
           artifactName: "perspective-jupyterlab-dist"
 
-  - job: "Linux"
-    pool:
-      vmImage: "ubuntu-latest"
-
-    strategy:
-      matrix:
-        Python37ManyLinux2010:
-          python.version: "3.7"
-          python_flag: ""
-          manylinux_flag: "--manylinux2010"
-          artifact_name: "cp37-cp37m-manylinux2010_x86_64"
-
-        ? ${{ if or(startsWith(variables['build.sourceBranch'], 'refs/tags/v'), eq(variables['Build.Reason'], 'Schedule'), eq(variables['Build.Reason'], 'Manual')) }}
-        : Python36ManyLinux2010:
-            python.version: "3.6"
-            python_flag: "--python36"
-            manylinux_flag: "--manylinux2010"
-            artifact_name: "cp36-cp36m-manylinux2010_x86_64"
-          Python36ManyLinux2014:
-            python.version: "3.6"
-            python_flag: "--python36"
-            manylinux_flag: "--manylinux2014"
-            artifact_name: "cp36-cp36m-manylinux2014_x86_64"
-          # Python37ManyLinux2010 is always built
-          Python37ManyLinux2014:
-            python.version: "3.7"
-            python_flag: ""
-            manylinux_flag: "--manylinux2014"
-            artifact_name: "cp37-cp37m-manylinux2014_x86_64"
-          Python38ManyLinux2010:
-            python.version: "3.8"
-            python_flag: "--python38"
-            manylinux_flag: "--manylinux2010"
-            artifact_name: "cp38-cp38-manylinux2010_x86_64"
-          Python38ManyLinux2014:
-            python.version: "3.8"
-            python_flag: "--python38"
-            manylinux_flag: "--manylinux2014"
-            artifact_name: "cp38-cp38-manylinux2014_x86_64"
-          Python39ManyLinux2010:
-            python.version: "3.9"
-            python_flag: "--python39"
-            manylinux_flag: "--manylinux2010"
-            artifact_name: "cp39-cp39-manylinux2010_x86_64"
-          Python39ManyLinux2014:
-            python.version: "3.9"
-            python_flag: "--python39"
-            manylinux_flag: "--manylinux2014"
-            artifact_name: "cp39-cp39-manylinux2014_x86_64"
-
-    steps:
-      - ${{ parameters.initSteps }}
-      - ${{ parameters.pythonInitSteps }}
-      - ${{ parameters.pythonBuildDockerSteps }}
-      - ${{ parameters.pythonCoverageSteps }}
-      - ${{ parameters.pythonLinuxWheelSteps }}
-
-  # - job: 'Linux_Python_SDist'
+  # - job: "Linux"
   #   pool:
-  #     vmImage: 'ubuntu-18.04'
+  #     vmImage: "ubuntu-latest"
+
+  #   strategy:
+  #     matrix:
+  #       Python37ManyLinux2010:
+  #         python.version: "3.7"
+  #         python_flag: ""
+  #         manylinux_flag: "--manylinux2010"
+  #         artifact_name: "cp37-cp37m-manylinux2010_x86_64"
+
+  #       ? ${{ if or(startsWith(variables['build.sourceBranch'], 'refs/tags/v'), eq(variables['Build.Reason'], 'Schedule'), eq(variables['Build.Reason'], 'Manual')) }}
+  #       : Python36ManyLinux2010:
+  #           python.version: "3.6"
+  #           python_flag: "--python36"
+  #           manylinux_flag: "--manylinux2010"
+  #           artifact_name: "cp36-cp36m-manylinux2010_x86_64"
+  #         Python36ManyLinux2014:
+  #           python.version: "3.6"
+  #           python_flag: "--python36"
+  #           manylinux_flag: "--manylinux2014"
+  #           artifact_name: "cp36-cp36m-manylinux2014_x86_64"
+  #         # Python37ManyLinux2010 is always built
+  #         Python37ManyLinux2014:
+  #           python.version: "3.7"
+  #           python_flag: ""
+  #           manylinux_flag: "--manylinux2014"
+  #           artifact_name: "cp37-cp37m-manylinux2014_x86_64"
+  #         Python38ManyLinux2010:
+  #           python.version: "3.8"
+  #           python_flag: "--python38"
+  #           manylinux_flag: "--manylinux2010"
+  #           artifact_name: "cp38-cp38-manylinux2010_x86_64"
+  #         Python38ManyLinux2014:
+  #           python.version: "3.8"
+  #           python_flag: "--python38"
+  #           manylinux_flag: "--manylinux2014"
+  #           artifact_name: "cp38-cp38-manylinux2014_x86_64"
+  #         Python39ManyLinux2010:
+  #           python.version: "3.9"
+  #           python_flag: "--python39"
+  #           manylinux_flag: "--manylinux2010"
+  #           artifact_name: "cp39-cp39-manylinux2010_x86_64"
+  #         Python39ManyLinux2014:
+  #           python.version: "3.9"
+  #           python_flag: "--python39"
+  #           manylinux_flag: "--manylinux2014"
+  #           artifact_name: "cp39-cp39-manylinux2014_x86_64"
+
+  #   steps:
+  #     - ${{ parameters.initSteps }}
+  #     - ${{ parameters.pythonInitSteps }}
+  #     - ${{ parameters.pythonBuildDockerSteps }}
+  #     - ${{ parameters.pythonCoverageSteps }}
+  #     - ${{ parameters.pythonLinuxWheelSteps }}
+
+  # # - job: 'Linux_Python_SDist'
+  # #   pool:
+  # #     vmImage: 'ubuntu-18.04'
+
+  # #   strategy:
+  # #     matrix:
+  # #       Python37:
+  # #         python.version: '3.7'
+  # #         python_flag: ''
+
+  # #   steps:
+  # #     - ${{ parameters.initSteps }}
+  # #     - ${{ parameters.linuxInitSteps }}
+  # #     - ${{ parameters.pythonBuildSteps }}
+  # #     - ${{ parameters.pythonSDistSteps }}
+
+  # - job: "Windows"
+  #   pool:
+  #     vmImage: "windows-2019"
 
   #   strategy:
   #     matrix:
   #       Python37:
-  #         python.version: '3.7'
-  #         python_flag: ''
+  #         python.version: "3.7"
+  #         python_flag: ""
+  #         artifact_name: "cp37-cp37m-win64_amd"
+  #       ? ${{ if or(startsWith(variables['build.sourceBranch'], 'refs/tags/v'), eq(variables['Build.Reason'], 'Schedule'), eq(variables['Build.Reason'], 'Manual')) }}
+  #       : Python38:
+  #           python.version: "3.8"
+  #           python_flag: "--python38"
+  #           artifact_name: "cp38-cp38m-win64_amd"
+  #         Python39:
+  #           python.version: "3.9"
+  #           python_flag: "--python39"
+  #           artifact_name: "cp39-cp39m-win64_amd"
 
   #   steps:
   #     - ${{ parameters.initSteps }}
-  #     - ${{ parameters.linuxInitSteps }}
-  #     - ${{ parameters.pythonBuildSteps }}
-  #     - ${{ parameters.pythonSDistSteps }}
+  #     - ${{ parameters.pythonInitSteps }}
+  #     - ${{ parameters.windowsInitSteps }}
+  #     - ${{ parameters.pythonBuildVS2019Steps }}
 
-  - job: "Windows"
-    pool:
-      vmImage: "windows-2019"
+  # # Separate out windows wheel builds as the windows
+  # # build takes 37 years to finish
+  # - job: "Windows_Wheels"
+  #   pool:
+  #     vmImage: "windows-2019"
+  #   condition: or(startsWith(variables['build.sourceBranch'], 'refs/tags/v'), eq(variables['Build.Reason'], 'Schedule'), eq(variables['Build.Reason'], 'Manual'))
 
-    strategy:
-      matrix:
-        Python37:
-          python.version: "3.7"
-          python_flag: ""
-          artifact_name: "cp37-cp37m-win64_amd"
-        ? ${{ if or(startsWith(variables['build.sourceBranch'], 'refs/tags/v'), eq(variables['Build.Reason'], 'Schedule'), eq(variables['Build.Reason'], 'Manual')) }}
-        : Python38:
-            python.version: "3.8"
-            python_flag: "--python38"
-            artifact_name: "cp38-cp38m-win64_amd"
-          Python39:
-            python.version: "3.9"
-            python_flag: "--python39"
-            artifact_name: "cp39-cp39m-win64_amd"
+  #   strategy:
+  #     matrix:
+  #       Python37:
+  #         python.version: "3.7"
+  #         python_flag: ""
+  #         artifact_name: "cp37-cp37m-win64_amd"
+  #       Python38:
+  #         python.version: "3.8"
+  #         python_flag: "--python38"
+  #         artifact_name: "cp38-cp38m-win64_amd"
+  #       Python39:
+  #         python.version: "3.9"
+  #         python_flag: "--python39"
+  #         artifact_name: "cp39-cp39m-win64_amd"
 
-    steps:
-      - ${{ parameters.initSteps }}
-      - ${{ parameters.pythonInitSteps }}
-      - ${{ parameters.windowsInitSteps }}
-      - ${{ parameters.pythonBuildVS2019Steps }}
+  #   steps:
+  #     - ${{ parameters.initSteps }}
+  #     - ${{ parameters.pythonInitSteps }}
+  #     - ${{ parameters.windowsInitSteps }}
+  #     - ${{ parameters.pythonWindowsWheelVS2019Steps }}
 
-  # Separate out windows wheel builds as the windows
-  # build takes 37 years to finish
-  - job: "Windows_Wheels"
-    pool:
-      vmImage: "windows-2019"
-    condition: or(startsWith(variables['build.sourceBranch'], 'refs/tags/v'), eq(variables['Build.Reason'], 'Schedule'), eq(variables['Build.Reason'], 'Manual'))
+  # - job: "MacOS_Catalina"
+  #   pool:
+  #     vmImage: "macos-10.15"
+  #   condition: or(startsWith(variables['build.sourceBranch'], 'refs/tags/v'), eq(variables['Build.Reason'], 'Schedule'), eq(variables['Build.Reason'], 'Manual'))
 
-    strategy:
-      matrix:
-        Python37:
-          python.version: "3.7"
-          python_flag: ""
-          artifact_name: "cp37-cp37m-win64_amd"
-        Python38:
-          python.version: "3.8"
-          python_flag: "--python38"
-          artifact_name: "cp38-cp38m-win64_amd"
-        Python39:
-          python.version: "3.9"
-          python_flag: "--python39"
-          artifact_name: "cp39-cp39m-win64_amd"
+  #   strategy:
+  #     matrix:
+  #         Python36:
+  #           python.version: "3.6"
+  #           python_flag: "--python36"
+  #           artifact_name: "cp36-cp36m-macosx_10_15_x86_64"
 
-    steps:
-      - ${{ parameters.initSteps }}
-      - ${{ parameters.pythonInitSteps }}
-      - ${{ parameters.windowsInitSteps }}
-      - ${{ parameters.pythonWindowsWheelVS2019Steps }}
+  #         Python37:
+  #           python.version: "3.7"
+  #           python_flag: ""
+  #           artifact_name: "cp37-cp37m-macosx_10_15_x86_64"
 
-  - job: "MacOS_Catalina"
-    pool:
-      vmImage: "macos-10.15"
-    condition: or(startsWith(variables['build.sourceBranch'], 'refs/tags/v'), eq(variables['Build.Reason'], 'Schedule'), eq(variables['Build.Reason'], 'Manual'))
-
-    strategy:
-      matrix:
-          Python36:
-            python.version: "3.6"
-            python_flag: "--python36"
-            artifact_name: "cp36-cp36m-macosx_10_15_x86_64"
-
-          Python37:
-            python.version: "3.7"
-            python_flag: ""
-            artifact_name: "cp37-cp37m-macosx_10_15_x86_64"
-
-          Python38:
-            python.version: "3.8"
-            python_flag: "--python38"
-            artifact_name: "cp38-cp38-macosx_10_15_x86_64"
+  #         Python38:
+  #           python.version: "3.8"
+  #           python_flag: "--python38"
+  #           artifact_name: "cp38-cp38-macosx_10_15_x86_64"
             
-          Python39:
-            python.version: "3.9"
-            python_flag: "--python39"
-            artifact_name: "cp39-cp39-macosx_10_15_x86_64"
+  #         Python39:
+  #           python.version: "3.9"
+  #           python_flag: "--python39"
+  #           artifact_name: "cp39-cp39-macosx_10_15_x86_64"
           
 
-    steps:
-      - ${{ parameters.initSteps }}
-      - ${{ parameters.pythonInitSteps }}
-      - ${{ parameters.macInitSteps }}
-      - ${{ parameters.pythonBuildSteps }}
-      - ${{ parameters.pythonCoverageSteps }}
-      - ${{ parameters.pythonMacWheelSteps }}
+  #   steps:
+  #     - ${{ parameters.initSteps }}
+  #     - ${{ parameters.pythonInitSteps }}
+  #     - ${{ parameters.macInitSteps }}
+  #     - ${{ parameters.pythonBuildSteps }}
+  #     - ${{ parameters.pythonCoverageSteps }}
+  #     - ${{ parameters.pythonMacWheelSteps }}
 
-  - job: "MacOS_BigSur"
-    pool:
-      vmImage: "macos-11"
+  # - job: "MacOS_BigSur"
+  #   pool:
+  #     vmImage: "macos-11"
 
-    strategy:
-      matrix:
-        Python39:
-          python.version: "3.9"
-          python_flag: "--python39"
-          artifact_name: "cp39-cp39-macosx_11_0_x86_64"
+  #   strategy:
+  #     matrix:
+  #       Python39:
+  #         python.version: "3.9"
+  #         python_flag: "--python39"
+  #         artifact_name: "cp39-cp39-macosx_11_0_x86_64"
 
-    steps:
-      - ${{ parameters.initSteps }}
-      - ${{ parameters.pythonInitSteps }}
-      - ${{ parameters.macInitSteps }}
-      - ${{ parameters.pythonBuildSteps }}
-      - ${{ parameters.pythonCoverageSteps }}
-      - ${{ parameters.pythonMacWheelSteps }}
+  #   steps:
+  #     - ${{ parameters.initSteps }}
+  #     - ${{ parameters.pythonInitSteps }}
+  #     - ${{ parameters.macInitSteps }}
+  #     - ${{ parameters.pythonBuildSteps }}
+  #     - ${{ parameters.pythonCoverageSteps }}
+  #     - ${{ parameters.pythonMacWheelSteps }}
 
-  - job: "Jupyterlab"
-    dependsOn: ["WebAssembly", "Linux"]
-    pool:
-      vmImage: "ubuntu-latest"
-    variables:
-      python.version: "3.7"
-      python_flag: ""
-      manylinux_flag: "--manylinux2010"
-      artifact_name: "cp37-cp37m-manylinux2010_x86_64"
+  # - job: "Jupyterlab"
+  #   dependsOn: ["WebAssembly", "Linux"]
+  #   pool:
+  #     vmImage: "ubuntu-latest"
+  #   variables:
+  #     python.version: "3.7"
+  #     python_flag: ""
+  #     manylinux_flag: "--manylinux2010"
+  #     artifact_name: "cp37-cp37m-manylinux2010_x86_64"
 
-    steps:
-      # don't use InitSteps because we don't want to cache local puppeteer
-      - task: NodeTool@0
-        inputs:
-          versionSpec: "16.x"
+  #   steps:
+  #     # don't use InitSteps because we don't want to cache local puppeteer
+  #     - task: NodeTool@0
+  #       inputs:
+  #         versionSpec: "16.x"
 
-      - bash: npm install -g yarn
-        displayName: "Install Yarn"
+  #     - bash: npm install -g yarn
+  #       displayName: "Install Yarn"
 
-      - bash: yarn --frozen-lockfile
-        displayName: "Install Javascript Dependencies"
+  #     - bash: yarn --frozen-lockfile
+  #       displayName: "Install Javascript Dependencies"
 
-      - ${{ parameters.pythonInitSteps }}
-      - ${{ parameters.wasmInitSteps }}
+  #     - ${{ parameters.pythonInitSteps }}
+  #     - ${{ parameters.wasmInitSteps }}
 
-      - task: DownloadPipelineArtifact@2
-        displayName: "Download Python 3.7 Perspective Wheel"
-        inputs:
-          artifact: $(artifact_name)
-          path: $(System.DefaultWorkingDirectory)/wheel
+  #     - task: DownloadPipelineArtifact@2
+  #       displayName: "Download Python 3.7 Perspective Wheel"
+  #       inputs:
+  #         artifact: $(artifact_name)
+  #         path: $(System.DefaultWorkingDirectory)/wheel
 
-      - bash: python -m pip install $(System.DefaultWorkingDirectory)/wheel/*.whl
-        displayName: "Install perspective-python from wheel"
+  #     - bash: python -m pip install $(System.DefaultWorkingDirectory)/wheel/*.whl
+  #       displayName: "Install perspective-python from wheel"
 
 
-      - bash: yarn add -W --dev puppeteer@9.0.0
-        displayName: "Install Puppeteer"
+  #     - bash: yarn add -W --dev puppeteer@9.0.0
+  #       displayName: "Install Puppeteer"
 
-      - task: DownloadPipelineArtifact@2
-        displayName: "Download perspective dist"
-        inputs:
-          artifact: "perspective-dist"
-          path: $(System.DefaultWorkingDirectory)
+  #     - task: DownloadPipelineArtifact@2
+  #       displayName: "Download perspective dist"
+  #       inputs:
+  #         artifact: "perspective-dist"
+  #         path: $(System.DefaultWorkingDirectory)
 
-      - task: DownloadPipelineArtifact@2
-        displayName: "Download perspective-viewer dist"
-        inputs:
-          artifact: "perspective-viewer-dist"
-          path: $(System.DefaultWorkingDirectory)
+  #     - task: DownloadPipelineArtifact@2
+  #       displayName: "Download perspective-viewer dist"
+  #       inputs:
+  #         artifact: "perspective-viewer-dist"
+  #         path: $(System.DefaultWorkingDirectory)
 
-      - task: DownloadPipelineArtifact@2
-        displayName: "Download perspective-viewer-datagrid dist"
-        inputs:
-          artifact: "perspective-viewer-datagrid-dist"
-          path: $(System.DefaultWorkingDirectory)
+  #     - task: DownloadPipelineArtifact@2
+  #       displayName: "Download perspective-viewer-datagrid dist"
+  #       inputs:
+  #         artifact: "perspective-viewer-datagrid-dist"
+  #         path: $(System.DefaultWorkingDirectory)
 
-      - task: DownloadPipelineArtifact@2
-        displayName: "Download perspective-viewer-d3fc dist"
-        inputs:
-          artifact: "perspective-viewer-d3fc-dist"
-          path: $(System.DefaultWorkingDirectory)
+  #     - task: DownloadPipelineArtifact@2
+  #       displayName: "Download perspective-viewer-d3fc dist"
+  #       inputs:
+  #         artifact: "perspective-viewer-d3fc-dist"
+  #         path: $(System.DefaultWorkingDirectory)
 
-      - task: DownloadPipelineArtifact@2
-        displayName: "Download perspective-jupyterlab dist"
-        inputs:
-          artifact: "perspective-jupyterlab-dist"
-          path: $(System.DefaultWorkingDirectory)
+  #     - task: DownloadPipelineArtifact@2
+  #       displayName: "Download perspective-jupyterlab dist"
+  #       inputs:
+  #         artifact: "perspective-jupyterlab-dist"
+  #         path: $(System.DefaultWorkingDirectory)
 
-      - bash: tar --strip-components=1 -xvf $(System.DefaultWorkingDirectory)/perspective-dist.tgz -C $(System.DefaultWorkingDirectory)/packages/perspective package
-        displayName: "Install perspective dist"
+  #     - bash: tar --strip-components=1 -xvf $(System.DefaultWorkingDirectory)/perspective-dist.tgz -C $(System.DefaultWorkingDirectory)/packages/perspective package
+  #       displayName: "Install perspective dist"
 
-      - bash: tar --strip-components=1 -xvf $(System.DefaultWorkingDirectory)/perspective-viewer-dist.tgz -C $(System.DefaultWorkingDirectory)/rust/perspective-viewer package
-        displayName: "Install perspective-viewer dist"
+  #     - bash: tar --strip-components=1 -xvf $(System.DefaultWorkingDirectory)/perspective-viewer-dist.tgz -C $(System.DefaultWorkingDirectory)/rust/perspective-viewer package
+  #       displayName: "Install perspective-viewer dist"
 
-      - bash: tar --strip-components=1 -xvf $(System.DefaultWorkingDirectory)/perspective-viewer-datagrid-dist.tgz -C $(System.DefaultWorkingDirectory)/packages/perspective-viewer-datagrid package
-        displayName: "Install perspective-viewer-datagrid dist"
+  #     - bash: tar --strip-components=1 -xvf $(System.DefaultWorkingDirectory)/perspective-viewer-datagrid-dist.tgz -C $(System.DefaultWorkingDirectory)/packages/perspective-viewer-datagrid package
+  #       displayName: "Install perspective-viewer-datagrid dist"
 
-      - bash: tar --strip-components=1 -xvf $(System.DefaultWorkingDirectory)/perspective-viewer-d3fc-dist.tgz -C $(System.DefaultWorkingDirectory)/packages/perspective-viewer-d3fc package
-        displayName: "Install perspective-viewer-d3fc dist"
+  #     - bash: tar --strip-components=1 -xvf $(System.DefaultWorkingDirectory)/perspective-viewer-d3fc-dist.tgz -C $(System.DefaultWorkingDirectory)/packages/perspective-viewer-d3fc package
+  #       displayName: "Install perspective-viewer-d3fc dist"
 
-      - bash: tar --strip-components=1 -xvf $(System.DefaultWorkingDirectory)/perspective-jupyterlab-dist.tgz -C $(System.DefaultWorkingDirectory)/packages/perspective-jupyterlab package
-        displayName: "Install perspective-jupyterlab dist"
+  #     - bash: tar --strip-components=1 -xvf $(System.DefaultWorkingDirectory)/perspective-jupyterlab-dist.tgz -C $(System.DefaultWorkingDirectory)/packages/perspective-jupyterlab package
+  #       displayName: "Install perspective-jupyterlab dist"
 
-      - bash: jupyter labextension install $(System.DefaultWorkingDirectory)/packages/perspective-jupyterlab
-        displayName: "Install perspective-jupyterlab labextension"
+  #     - bash: jupyter labextension install $(System.DefaultWorkingDirectory)/packages/perspective-jupyterlab
+  #       displayName: "Install perspective-jupyterlab labextension"
 
-      - bash: yarn test_js --jupyter --debug
-        displayName: "Run Jupyterlab tests"
-        env:
-          PACKAGE: perspective-jupyterlab
+  #     - bash: yarn test_js --jupyter --debug
+  #       displayName: "Run Jupyterlab tests"
+  #       env:
+  #         PACKAGE: perspective-jupyterlab
