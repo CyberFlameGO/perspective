@@ -276,6 +276,7 @@ jobs:
     # Setup matrix job configuration #
     ##################################
     runs-on: ${{ matrix.os }}
+    if: ${{ !contains(github.event.head_commit.message, '[ci-skip-python]') }}
 
     steps:
     - name: Checkout
@@ -572,8 +573,6 @@ jobs:
         node-version: [16.x]
         is-full-run:
           - ${{ startsWith(github.ref, 'refs/heads/v') || contains(github.ref, 'master') || contains(github.event.head_commit.message, '[ci-full]') }}
-        exclude-python-run:
-          - ${{ contains(github.event.head_commit.message, '[ci-skip-python]') }}
         include-windows-run:
           - ${{ contains(github.event.head_commit.message, '[ci-include-windows]') }}
         exclude:
@@ -618,9 +617,6 @@ jobs:
           - is-full-run: false
             container: 2010
 
-          # Exclude python builds if set
-          - exclude-python-run: true
-
           # Exclude windows builds if set
           - include-windows-run: false
             os: windows-latest
@@ -651,6 +647,7 @@ jobs:
     # Setup matrix job configuration #
     ##################################
     runs-on: ${{ matrix.os }}
+    if: ${{ !contains(github.event.head_commit.message, '[ci-skip-python]') }}
 
     steps:
     - name: Checkout
@@ -927,16 +924,12 @@ jobs:
         python-version:
           - 3.9
         node-version: [16.x]
-        exclude-python-run:
-          - ${{ contains(github.event.head_commit.message, '[ci-skip-python]') }}
-        exclude:
-          # Exclude if skippingpython
-          - exclude-python-run: true
 
     ##################################
     # Setup matrix job configuration #
     ##################################
     runs-on: ${{ matrix.os }}
+    if: ${{ !contains(github.event.head_commit.message, '[ci-skip-python]') }}
 
     steps:
     - name: Checkout
@@ -1112,8 +1105,6 @@ jobs:
         node-version: [16.x]
         is-full-run:
           - ${{ startsWith(github.ref, 'refs/heads/v') || contains(github.ref, 'master') || contains(github.event.head_commit.message, '[ci-full]') }}
-        exclude-python-run:
-          - ${{ contains(github.event.head_commit.message, '[ci-skip-python]') }}
         include-windows-run:
           - ${{ contains(github.event.head_commit.message, '[ci-include-windows]') }}
         exclude:
@@ -1129,9 +1120,6 @@ jobs:
           ##############################################
           # Things to exclude if not a full matrix run #
           ##############################################
-          # Exclude if skippingpython
-          - exclude-python-run: true
-
           # Exclude if skipping windows
           - include-windows-run: false
             os: windows-latest
@@ -1162,6 +1150,7 @@ jobs:
     # Setup matrix job configuration #
     ##################################
     runs-on: ${{ matrix.os }}
+    if: ${{ !contains(github.event.head_commit.message, '[ci-skip-python]') }}
 
     steps:
     - name: Checkout
@@ -1283,16 +1272,12 @@ jobs:
           - ubuntu-latest # https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-Readme.md
         python-version:
           - 3.9
-        exclude-python-run:
-          - ${{ contains(github.event.head_commit.message, '[ci-skip-python]') }}
-        exclude:
-          # Don't run if skipping python
-          - exclude-python-run: true
 
     ##################################
     # Setup matrix job configuration #
     ##################################
     runs-on: ${{ matrix.os }}
+    if: ${{ !contains(github.event.head_commit.message, '[ci-skip-python]') }}
 
     steps:
     - name: Checkout
